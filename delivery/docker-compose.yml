@@ -17,7 +17,7 @@ services:
       - /usr/src/app/node_modules # 콜론 없으면 비동기화
 
   postgres_user:
-    image: postres:16
+    image: postgres:16
     environment: 
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -25,7 +25,7 @@ services:
     ports:
       - '6001:5432'
     volumes: # Postgres 저장 위치
-      -./postgres/user:/var/lib/postgresql/data
+      - ./postgres/user:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
