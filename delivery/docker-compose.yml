@@ -7,8 +7,28 @@ services:
       dockerfile: ./apps/user/Dockerfile
       target: development
     command: npm run start user
+    depends_on:
+      postgres_user:
+        condition: service_healthy
     ports:
-      - '3001:3000'
+      - '3001:3000' # 컴퓨터에서 PORT:컨테이너의 PORT
     volumes:
       - .:/usr/src/app # 콜론 있으면 동기화
       - /usr/src/app/node_modules # 콜론 없으면 비동기화
+
+  postgres_user:
+    image: postres:16
+    environment: 
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '6001:5432'
+    volumes: # Postgres 저장 위치
+      -./postgres/user:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
