@@ -1,0 +1,7 @@
+version: '3.1'
+
+services:
+  user:
+    build:
+      context: . 
+      dockerfile: ./apps/user/Dockerfile
